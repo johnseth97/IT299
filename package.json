@@ -6,9 +6,11 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm --workspace Frontend run dev\" \"npm --workspace Backend run dev\"",
-    "build": "npm --workspace Frontend run build && npm --workspace Backend run build"
+    "build": "npm --workspace Frontend run build && npm --workspace Backend run build",
+    "lint": "npm --workspace Frontend run lint && npm --workspace Backend run lint"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "prettier": "^3.6.2"
   }
 }

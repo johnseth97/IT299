@@ -8,7 +8,9 @@
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
     "build": "tsc --project tsconfig.json",
     "start": "npm run build && npm run run",
-    "run": "node dist/index.js"
+    "run": "node dist/index.js",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts, --fix"
   },
   "keywords": [],
   "author": "",
@@ -21,8 +23,12 @@
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.13",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.31.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.36.0"
   }
 }
