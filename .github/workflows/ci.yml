@@ -27,6 +27,7 @@ jobs:
 
       - name: Install deps
         run: npm ci
+        working-directory: .
 
       - name: Lint
         run: npm run lint
@@ -53,6 +54,7 @@ jobs:
 
       - name: Install deps
         run: npm ci
+        working-directory: .
 
       - name: Lint
         run: npm run lint
