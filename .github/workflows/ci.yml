@@ -11,29 +11,14 @@ on:
         type: boolean
 
 jobs:
-  matrix:
+  backend:
+    if: ${{ inputs.run_backend }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        workspace: [backend, frontend]
-
-    # ✅ Skip matrix jobs based on input flags
-    if: |
-      (matrix.workspace == 'backend' && inputs.run_backend) ||
-      (matrix.workspace == 'frontend' && inputs.run_frontend)
-
     defaults:
       run:
-        working-directory: ${{ matrix.workspace == 'backend' && 'Backend' || 'Frontend' }}
-
+        working-directory: Backend
     steps:
       - uses: actions/checkout@v4
-      - name: Skip if workspace is not selected
-        if: |
-          (matrix.workspace == 'backend' && !inputs.run_backend) ||
-          (matrix.workspace == 'frontend' && !inputs.run_frontend)
-        run: echo "Skipping ${matrix.workspace} workspace as per input flags."
-
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -50,12 +35,38 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Placeholder Test
-        run: echo "✅ Tests passed"
+        run: echo "✅ Backend tests passed"
+
+  frontend:
+    if: ${{ inputs.run_frontend }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Placeholder Test
+        run: echo "✅ Frontend tests passed"
 
   release:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
-    needs: matrix
+    needs: [backend, frontend]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
