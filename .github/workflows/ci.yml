@@ -28,6 +28,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Skip if workspace is not selected
+        if: |
+          (matrix.workspace == 'backend' && !inputs.run_backend) ||
+          (matrix.workspace == 'frontend' && !inputs.run_frontend)
+        run: echo "Skipping ${matrix.workspace} workspace as per input flags."
+
 
       - name: Set up Node
         uses: actions/setup-node@v4
