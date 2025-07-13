@@ -1,0 +1,11 @@
+services:
+  backend:
+    build:
+      context: ./Backend
+      args:
+        NODE_ENV: development
+  frontend:
+    build:
+      context: ./Frontend
+      args:
+        NODE_ENV: development

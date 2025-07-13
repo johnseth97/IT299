@@ -6,6 +6,6 @@
     "rootDir": "./src",
     "esModuleInterop": true,
     "strict": true
-  }
+  },
   "include": ["src/**/*"],
 }
