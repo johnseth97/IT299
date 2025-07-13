@@ -16,11 +16,12 @@ jobs:
     strategy:
       matrix:
         workspace: [backend, frontend]
-        exclude:
-          - workspace: backend
-            if: ${{ !inputs.run_backend }}
-          - workspace: frontend
-            if: ${{ !inputs.run_frontend }}
+
+    # ✅ Skip matrix jobs based on input flags
+    if: |
+      (matrix.workspace == 'backend' && inputs.run_backend) ||
+      (matrix.workspace == 'frontend' && inputs.run_frontend)
+
     defaults:
       run:
         working-directory: ${{ matrix.workspace == 'backend' && 'Backend' || 'Frontend' }}
@@ -67,8 +68,7 @@ jobs:
 
       - name: Run semantic-release
         id: semver
-        run: |
-          npx semantic-release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
