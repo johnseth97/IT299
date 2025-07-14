@@ -5,7 +5,7 @@ import serviceTypesRouter from './routes/serviceTypes.js'
 import ordersRouter from './routes/orders.js'
 
 const app = express()
-const PORT = process.env.PORT || 5000 // Defualt port, can be overridden by environment variable
+const PORT = process.env.PORT || 8080 // Defualt port, can be overridden by environment variable
 
 app.use(express.json())
 
