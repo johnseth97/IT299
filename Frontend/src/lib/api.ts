@@ -49,13 +49,12 @@ export async function fetchServiceTypes(): Promise<ServiceType[]> {
 export async function fetchOrdersByEmail(
   email: string
 ): Promise<OrderResponse[]> {
-  if (!email || !email.includes('@')) {
-    throw new Error('Invalid email address provided')
+  const res = await fetch(`/api/orders/email/${encodeURIComponent(email)}`)
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.error || 'Failed to fetch orders')
   }
-
-  const res = await fetch(`/api/orders?email=${encodeURIComponent(email)}`)
-  if (!res.ok) throw new Error('Failed to load orders')
-  return res.json()
+  return await res.json()
 }
 
 export async function submitOrder(

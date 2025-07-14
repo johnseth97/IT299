@@ -91,4 +91,43 @@ router.get('/:id', (req: Request, res: Response) => {
   res.json({ ...order, services })
 })
 
+// backend/src/routes/orders.ts
+
+router.get('/email/:email', (req: Request, res: Response) => {
+  const email = req.params.email
+
+  const orders = db
+    .prepare(
+      `
+      SELECT o.id, o.created_at, c.name, c.email, c.phone
+      FROM orders o
+      JOIN customers c ON o.customer_id = c.id
+      WHERE c.email = ?
+      ORDER BY o.created_at DESC
+    `
+    )
+    .all(email) as OrderRow[]
+
+  if (orders.length === 0) {
+    return res.status(404).json({ error: 'No orders found for this email.' })
+  }
+
+  const getServices = db.prepare(`
+    SELECT s.id, s.photo_url, st.name AS service_type, st.cost, s.order_id
+    FROM services s
+    JOIN service_types st ON s.service_type_id = st.id
+    WHERE s.order_id = ?
+  `)
+
+  const result = orders.map((order) => {
+    const services = getServices.all(order.id) as ServiceRow[]
+    return {
+      ...order,
+      services,
+    }
+  })
+
+  res.json(result)
+})
+
 export default router
