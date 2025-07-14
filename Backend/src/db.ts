@@ -39,17 +39,26 @@ db.exec(`
     FOREIGN KEY (service_type_id) REFERENCES service_types(id)
   );
 
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    description TEXT
+  );
+
   INSERT INTO photos (title, url) VALUES
     ('Sunset Beach', '/img/sunset.jpg'),
     ('Mountain Hike', '/img/mountain.jpg'),
     ('City Lights', '/img/city.jpg');
 
-  INSERT INTO service_types (name, cost) VALUES
+  INSERT INTO service_types (name, cost, category_id, description) VALUES
     ('Full Print', 19.99),
     ('Touchup', 9.99),
     ('Photo Edit', 14.99),
     ('Small Print', 4.99),
-    ('Upscale', 7.99);
+    ('Upscale', 7.99),
+    ('Large Print', 24.99)
+
+;
 `)
 
 export default db

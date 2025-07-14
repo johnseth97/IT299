@@ -40,7 +40,7 @@ export default function CartDrawer() {
   }
 
   return (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col h-full justify-between px-6 py-4">
       <div>
         <h2 className="text-xl font-bold mb-4">Your Cart</h2>
 
@@ -63,9 +63,15 @@ export default function CartDrawer() {
                     <p className="font-medium">
                       {serviceMap[item.serviceTypeId] || 'Unknown Service'}
                     </p>
-                    <p className="text-sm text-gray-500 truncate">
-                      Photo URL: {item.photoUrl || 'N/A'}
-                    </p>
+                    {item.photoUrl ? (
+                      <img
+                        src={item.photoUrl}
+                        alt="Uploaded"
+                        className="mt-1 w-24 h-16 object-cover rounded border"
+                      />
+                    ) : (
+                      <p className="text-sm text-gray-500">Photo: N/A</p>
+                    )}
                   </div>
                   <Button
                     size="sm"
