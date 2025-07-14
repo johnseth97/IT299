@@ -6,6 +6,7 @@ import Orders from './pages/Orders'
 import { Nav } from './components/Nav'
 import { CartProvider } from './context/CartContext'
 import { StrictMode } from 'react'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
@@ -20,6 +21,12 @@ function App() {
               <Route path="/orders" element={<Orders />} />
             </Routes>
           </div>
+          <Toaster
+            position="top-left"
+            richColors
+            closeButton
+            duration={10000}
+          />
         </Router>
       </CartProvider>
     </StrictMode>
