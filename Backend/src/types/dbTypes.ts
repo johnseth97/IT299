@@ -15,6 +15,19 @@ export type ServiceType = {
   id: number
   name: string
   cost: number
+  description?: string
+  category_id?: number
+}
+
+export type Category = {
+  id: number
+  name: string
+  description?: string
+}
+
+export type GroupedServiceTypes = {
+  category: Category
+  services: ServiceType[]
 }
 
 export type Service = {

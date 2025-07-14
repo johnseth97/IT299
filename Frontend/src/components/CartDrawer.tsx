@@ -15,10 +15,12 @@ export default function CartDrawer() {
   const [serviceMap, setServiceMap] = useState<Record<number, string>>({})
 
   useEffect(() => {
-    fetchServiceTypes().then((services) => {
+    fetchServiceTypes().then((groups) => {
       const map: Record<number, string> = {}
-      for (const svc of services) {
-        map[svc.id] = `${svc.name} ($${svc.cost.toFixed(2)})`
+      for (const group of groups) {
+        for (const svc of group.services) {
+          map[svc.id] = `${svc.name} ($${svc.cost.toFixed(2)})`
+        }
       }
       setServiceMap(map)
     })

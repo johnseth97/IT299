@@ -8,6 +8,20 @@ export type ServiceType = {
   cost: number
 }
 
+export type GroupedServiceTypes = {
+  category: {
+    id: number
+    name: string
+    description?: string
+  }
+  services: {
+    id: number
+    name: string
+    cost: number
+    description?: string
+  }[]
+}
+
 export type OrderResponse = {
   id: string
   created_at: string
@@ -40,9 +54,9 @@ export type CreateOrderRequest = {
 
 // --- API Helpers ---
 
-export async function fetchServiceTypes(): Promise<ServiceType[]> {
+export async function fetchServiceTypes(): Promise<GroupedServiceTypes[]> {
   const res = await fetch('/api/service-types')
-  if (!res.ok) throw new Error('Failed to load service types')
+  if (!res.ok) throw new Error('Failed to fetch service types')
   return res.json()
 }
 

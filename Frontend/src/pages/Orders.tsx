@@ -47,6 +47,16 @@ export default function Orders() {
             0
           )
 
+          // Group services by category
+          const groupedServices = order.services.reduce<
+            Record<string, typeof order.services>
+          >((acc, svc) => {
+            const cat = svc.category || 'Uncategorized'
+            if (!acc[cat]) acc[cat] = []
+            acc[cat].push(svc)
+            return acc
+          }, {})
+
           return (
             <Card key={order.id}>
               <CardContent className="space-y-2 p-4">
@@ -59,29 +69,30 @@ export default function Orders() {
                   </span>
                 </div>
                 <p className="text-gray-700">Customer: {order.name}</p>
-                <div className="space-y-2">
-                  {orders.length === 0 ? (
-                    <p className="text-gray-500 italic">
-                      No orders found for this email.
-                    </p>
-                  ) : (
-                    orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="border rounded p-4 shadow-sm bg-white space-y-2"
-                      >
-                        <p className="font-semibold">Order ID: {order.id}</p>
-                        <p className="text-gray-600">
-                          Date: {new Date(order.created_at).toLocaleString()}
-                        </p>
+
+                {/* Grouped services */}
+                <div className="space-y-4 pt-2">
+                  {Object.entries(groupedServices).map(
+                    ([category, services]) => (
+                      <div key={category}>
+                        <h3 className="text-md font-semibold border-b pb-1 mb-2">
+                          {category}
+                        </h3>
                         <div className="space-y-2">
-                          {order.services.map((svc, i) => (
+                          {services.map((svc, i) => (
                             <div
                               key={i}
                               className="border rounded px-3 py-2 flex justify-between items-center"
                             >
                               <div>
-                                <p>{svc.service_type}</p>
+                                <p className="font-semibold">
+                                  {svc.service_type}
+                                </p>
+                                {svc.description && (
+                                  <p className="text-sm text-gray-500">
+                                    {svc.description}
+                                  </p>
+                                )}
                                 {svc.photo_url ? (
                                   <Dialog>
                                     <DialogTrigger asChild>
@@ -117,17 +128,12 @@ export default function Orders() {
                             </div>
                           ))}
                         </div>
-                        <p className="text-right font-semibold">
-                          Total: $
-                          {order.services
-                            .reduce((sum, svc) => sum + svc.cost, 0)
-                            .toFixed(2)}
-                        </p>
                       </div>
-                    ))
+                    )
                   )}
                 </div>
-                <div className="text-right font-bold pt-2 border-t">
+
+                <div className="text-right font-bold pt-4 border-t">
                   Total: ${orderTotal.toFixed(2)}
                 </div>
               </CardContent>

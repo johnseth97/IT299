@@ -15,7 +15,7 @@ export function Nav() {
   return (
     <header className="border-b py-4 px-6 flex justify-between items-center bg-white">
       <Link to="/" className="text-2xl font-bold text-gray-800">
-        Picture This
+        📸 Picture This
       </Link>
       <nav className="flex gap-6 items-center">
         <Link to="/services" className={isActive('/services')}>
