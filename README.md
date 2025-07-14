@@ -104,8 +104,9 @@ This schema supports basic cart and order tracking logic.
 
 ## Docker Setup
 
-- Each component has its own Dockerfile
-- A docker- ompose.yml file defines shared network, volume mounts, build strategy
+- The frontend and backend each has its own Dockerfile
+- A docker-compose.yml file defines shared network, volume mounts, build strategy
+- A docker-compose.override.yml file defines the overrides for the dev environment
 - Backend exposes port 5000; frontend port 3000
 - .env files used for environment config
 
