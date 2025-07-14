@@ -33,6 +33,12 @@ export type OrderResponse = {
     photo_url: string
     service_type: string
     cost: number
+    description?: string
+    category?: {
+      id: number
+      name: string
+      description?: string
+    }
   }[]
 }
 

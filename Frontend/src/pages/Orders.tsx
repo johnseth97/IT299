@@ -51,7 +51,7 @@ export default function Orders() {
           const groupedServices = order.services.reduce<
             Record<string, typeof order.services>
           >((acc, svc) => {
-            const cat = svc.category || 'Uncategorized'
+            const cat = svc.category?.name || 'Uncategorized'
             if (!acc[cat]) acc[cat] = []
             acc[cat].push(svc)
             return acc

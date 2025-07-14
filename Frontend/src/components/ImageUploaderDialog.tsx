@@ -20,7 +20,6 @@ interface UploadDialogProps {
 }
 
 export function UploadDialog({
-  serviceTypeId,
   expectedCount,
   open,
   onClose,
