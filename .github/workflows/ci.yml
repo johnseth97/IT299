@@ -11,20 +11,12 @@ on:
         type: boolean
 
 jobs:
-  matrix:
+  backend:
+    if: ${{ inputs.run_backend }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        workspace: [backend, frontend]
-        exclude:
-          - workspace: backend
-            if: ${{ !inputs.run_backend }}
-          - workspace: frontend
-            if: ${{ !inputs.run_frontend }}
     defaults:
       run:
-        working-directory: ${{ matrix.workspace == 'backend' && 'Backend' || 'Frontend' }}
-
+        working-directory: Backend
     steps:
       - uses: actions/checkout@v4
 
@@ -35,6 +27,7 @@ jobs:
 
       - name: Install deps
         run: npm ci
+        working-directory: .
 
       - name: Lint
         run: npm run lint
@@ -43,12 +36,39 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Placeholder Test
-        run: echo "✅ Tests passed"
+        run: echo "✅ Backend tests passed"
+
+  frontend:
+    if: ${{ inputs.run_frontend }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+        working-directory: .
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+      - name: Placeholder Test
+        run: echo "✅ Frontend tests passed"
 
   release:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'
     runs-on: ubuntu-latest
-    needs: matrix
+    needs: [backend, frontend]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
@@ -67,8 +87,7 @@ jobs:
 
       - name: Run semantic-release
         id: semver
-        run: |
-          npx semantic-release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

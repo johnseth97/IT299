@@ -1,4 +1,6 @@
-import globals from 'globals'
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const globals = require('globals')
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config([
