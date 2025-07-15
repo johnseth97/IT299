@@ -9,16 +9,13 @@ on:
       run_frontend:
         required: true
         type: boolean
-  pull_request:
-    branches:
-      - main
-  push:
-    branches-ignore:
-      - '**'
+      is_pr:
+        required: false
+        type: boolean
 
 jobs:
   backend:
-    if: ${{ inputs.run_backend || github.event_name == 'pull_request' }}
+    if: ${{ inputs.run_backend }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -45,7 +42,7 @@ jobs:
         run: echo "✅ Backend tests passed"
 
   frontend:
-    if: ${{ inputs.run_frontend || github.event_name == 'pull_request' }}
+    if: ${{ inputs.run_frontend }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -72,7 +69,7 @@ jobs:
         run: echo "✅ Frontend tests passed"
 
   release:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'
+    if: ${{ !inputs.is_pr && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test') }}
     runs-on: ubuntu-latest
     needs: [backend, frontend]
     env:
