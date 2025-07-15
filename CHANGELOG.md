@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/johnseth97/IT299/compare/v1.1.1...v1.1.2) (2025-07-15)
+
+
+### Bug Fixes
+
+* **CD:** missing context ([8d7364d](https://github.com/johnseth97/IT299/commit/8d7364dc951438ce92ee4b47978c18a31204a953))
+
 ## [1.1.1](https://github.com/johnseth97/IT299/compare/v1.1.0...v1.1.1) (2025-07-15)
 
 
