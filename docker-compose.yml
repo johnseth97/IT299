@@ -18,9 +18,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://backend:8080}  # default to localhost if not set
     image: it299-frontend
     environment:
-      - VITE_API_URL=http://localhost:8080
+      - VITE_API_URL=http://backend:8080
     working_dir: /app  # matches where dist is copied
     ports:
       - "3000:3000"
