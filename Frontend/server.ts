@@ -25,7 +25,7 @@ app.use(
 )
 
 // 🎯 Wildcard route for SPA fallback
-app.get('/*splat', (_req, res) => {
+app.get(/^\/(?!api\/).*/, (_req, res) => {
   res.sendFile(path.join(distDir, 'index.html'))
 })
 
