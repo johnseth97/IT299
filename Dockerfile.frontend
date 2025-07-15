@@ -14,12 +14,17 @@ RUN npm install --workspace Frontend
 WORKDIR /app/Frontend
 RUN npm run build
 
-# Serve static files with `vite preview`
+# Serve static files with Express
 FROM node:20-slim AS runner
+
 WORKDIR /app
+
 COPY --from=builder /app/Frontend/dist ./dist
-RUN npm install -g vite
-RUN npm install -g serve
+COPY --from=builder /app/Frontend/server.js ./server.js
+COPY --from=builder /app/Frontend/package.json ./package.json
+
+# Install just express (can skip package.json if not needed)
+RUN npm install express tsx
 
 EXPOSE 3000
-CMD ["sh", "-c", "echo '🎯 Starting production server with serve…' && serve -s dist -l 3000"]
+CMD ["tsx", "server.ts"]
