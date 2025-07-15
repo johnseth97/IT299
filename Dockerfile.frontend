@@ -27,7 +27,7 @@ WORKDIR /app
 COPY --from=builder /app/Frontend/dist ./dist
 COPY --from=builder /app/Frontend/server.ts ./server.ts
 
-RUN npm install express
+RUN npm install express http-proxy-middleware
 RUN npm install -g tsx
 
 EXPOSE 3000
