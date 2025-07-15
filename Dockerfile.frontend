@@ -1,0 +1,16 @@
+# Dockerfile.frontend
+FROM node:20-slim
+
+WORKDIR /app
+
+# Copy monorepo-level files
+COPY ./package*.json ./pnpm-workspace.yaml* ./
+COPY ./Frontend ./Frontend
+
+# Install only frontend workspace deps
+RUN npm install --workspace Frontend
+
+WORKDIR /app/Frontend
+
+EXPOSE 3000
+CMD ["npm", "run", "dev"]

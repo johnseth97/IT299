@@ -1,0 +1,14 @@
+# Dockerfile.backend
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY ./package*.json ./pnpm-workspace.yaml* ./
+COPY ./Backend ./Backend
+
+RUN npm install --workspace Backend
+
+WORKDIR /app/Backend
+
+EXPOSE 8080
+CMD ["npm", "run", "dev"]
