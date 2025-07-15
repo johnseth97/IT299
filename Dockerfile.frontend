@@ -20,7 +20,7 @@ FROM node:20-slim AS runner
 WORKDIR /app
 
 COPY --from=builder /app/Frontend/dist ./dist
-COPY --from=builder /app/Frontend/server.js ./server.js
+COPY --from=builder /app/Frontend/server.js ./server.ts
 COPY --from=builder /app/Frontend/package.json ./package.json
 
 # Install just express (can skip package.json if not needed)
