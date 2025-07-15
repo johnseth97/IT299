@@ -25,11 +25,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use tag from input
+      - name: Read tag
         id: tag
         run: |
-          echo "Using tag: ${{ inputs.tag }}"
-          echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.tag }}" != "" ]]; then
+            TAG="${{ github.event.inputs.tag }}"
+          elif [[ -f semver_tag.txt ]]; then
+            TAG=$(cat semver_tag.txt)
+          else
+            TAG=$(git describe --tags --abbrev=0)
+          fi
+
+          echo "Using tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
