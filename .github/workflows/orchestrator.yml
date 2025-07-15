@@ -56,3 +56,4 @@ jobs:
       is_pr: ${{ github.event_name == 'pull_request' }}
       run_backend: ${{ needs.changes.outputs.backend == 'true' }}
       run_frontend: ${{ needs.changes.outputs.frontend == 'true' }}
+
