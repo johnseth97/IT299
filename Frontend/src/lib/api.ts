@@ -66,10 +66,13 @@ export type CreateOrderRequest = {
 
 // --- API Helpers ---
 
+// api.ts (or wherever your API calls live)
 const API_BASE =
-  typeof window !== 'undefined' && window.__APP_CONFIG__?.VITE_API_URL
-    ? window.__APP_CONFIG__.VITE_API_URL
+  typeof window !== 'undefined' && window.__CONFIG__?.VITE_API_URL
+    ? window.__CONFIG__.VITE_API_URL
     : 'http://localhost:8080'
+
+console.log('API_BASE:', API_BASE)
 
 console.log('API_BASE:', API_BASE)
 
