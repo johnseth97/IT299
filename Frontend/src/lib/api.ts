@@ -66,8 +66,15 @@ export type CreateOrderRequest = {
 
 // --- API Helpers ---
 
+const API_BASE =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:8080'
+    : import.meta.env.VITE_API_URL || ''
+
+console.log('API_BASE:', API_BASE)
+
 export async function fetchServiceTypes(): Promise<GroupedServiceTypes[]> {
-  const res = await fetch('/api/service-types')
+  const res = await fetch(`${API_BASE}/api/service-types`)
   if (!res.ok) throw new Error('Failed to fetch service types')
   return res.json()
 }
@@ -75,7 +82,9 @@ export async function fetchServiceTypes(): Promise<GroupedServiceTypes[]> {
 export async function fetchOrdersByEmail(
   email: string
 ): Promise<OrderResponse[]> {
-  const res = await fetch(`/api/orders/email/${encodeURIComponent(email)}`)
+  const res = await fetch(
+    `${API_BASE}/api/orders/email/${encodeURIComponent(email)}`
+  )
   if (!res.ok) {
     const err = await res.json()
     throw new Error(err.error || 'Failed to fetch orders')
@@ -84,7 +93,9 @@ export async function fetchOrdersByEmail(
 }
 
 export async function fetchOrderById(orderId: string): Promise<OrderResponse> {
-  const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`)
+  const res = await fetch(
+    `${API_BASE}/api/orders/${encodeURIComponent(orderId)}`
+  )
   if (!res.ok) {
     const err = await res.json()
     throw new Error(err.error || 'Failed to fetch order')
@@ -107,7 +118,7 @@ export async function fetchOrdersSmart(input: string): Promise<OrderResult> {
 export async function submitOrder(
   data: CreateOrderRequest
 ): Promise<{ orderId: string }> {
-  const res = await fetch('/api/orders', {
+  const res = await fetch(`${API_BASE}/api/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

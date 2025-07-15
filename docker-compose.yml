@@ -1,32 +1,39 @@
+version: "3.9"
+
 services:
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    ports:
-      - "8080:8080"
+    image: it299-backend
     env_file:
       - ./Backend/.env
-    volumes:
-      - ./Backend:/app
-      - backend_node_modules:/app/node_modules
-    command: npm run dev
+    working_dir: /app  # matches where dist is copied
+    command: node dist/app.js
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - it299
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+    image: it299-frontend
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    working_dir: /app  # matches where dist is copied
+    command: vite preview --port 3000 --host
     ports:
       - "3000:3000"
-    env_file:
-      - ./Frontend/.env
-    volumes:
-      - ./Frontend:/app
-      - frontend_node_modules:/app/node_modules
-    command: npm run dev
+    expose:
+      - "3000"
     depends_on:
       - backend
+    networks:
+      - it299
 
-volumes:
-  frontend_node_modules:
-  backend_node_modules:
+networks:
+  it299:

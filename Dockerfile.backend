@@ -1,14 +1,24 @@
 # Dockerfile.backend
-FROM node:20-slim
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
 COPY ./package*.json ./pnpm-workspace.yaml* ./
 COPY ./Backend ./Backend
 
+# Install only backend deps
 RUN npm install --workspace Backend
 
+# Build the backend
 WORKDIR /app/Backend
+RUN npm run build  # assumes this runs `tsc`
+
+# Run from compiled output
+FROM node:20-slim AS runner
+WORKDIR /app
+COPY --from=builder /app/Backend/dist ./dist
+COPY --from=builder /app/Backend/package*.json ./
+RUN npm install --omit=dev
 
 EXPOSE 8080
-CMD ["npm", "run", "dev"]
+CMD ["node", "dist/app.js"]

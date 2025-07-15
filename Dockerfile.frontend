@@ -1,5 +1,5 @@
 # Dockerfile.frontend
-FROM node:20-slim
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
@@ -7,10 +7,18 @@ WORKDIR /app
 COPY ./package*.json ./pnpm-workspace.yaml* ./
 COPY ./Frontend ./Frontend
 
-# Install only frontend workspace deps
+# Install only frontend deps
 RUN npm install --workspace Frontend
 
+# Build the frontend
 WORKDIR /app/Frontend
+RUN npm run build
+
+# Serve static files with `vite preview`
+FROM node:20-slim AS runner
+WORKDIR /app
+COPY --from=builder /app/Frontend/dist ./dist
+RUN npm install -g vite
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["vite", "preview", "--port", "3000", "--host"]
