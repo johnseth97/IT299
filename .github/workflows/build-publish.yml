@@ -15,6 +15,20 @@ on:
       run_frontend:
         required: true
         type: boolean
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to use for the images'
+        required: true
+        type: string
+      run_backend:
+        description: 'Build and push Backend image'
+        required: true
+        type: boolean
+      run_frontend:
+        description: 'Build and push Frontend image'
+        required: true
+        type: boolean
 
 jobs:
   build-publish:
