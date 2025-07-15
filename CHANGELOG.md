@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/johnseth97/IT299/compare/v1.2.0...v1.2.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **workflow:** hopefully simplier version of CI pipelines ([f32d046](https://github.com/johnseth97/IT299/commit/f32d046e3844d56cb18a892b96e41ee8f396941f))
+
 # [1.2.0](https://github.com/johnseth97/IT299/compare/v1.1.2...v1.2.0) (2025-07-15)
 
 
