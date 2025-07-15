@@ -1,4 +1,3 @@
-# Backend Dockerfile
 FROM node:20-slim
 
 WORKDIR /app
@@ -6,11 +5,11 @@ WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-# Install only backend dependencies
-COPY package*.json ./
+# Copy only Backend project and root workspace files
+COPY ./Backend /app
+COPY ./package*.json ./
+
 RUN npm install
 
-COPY . .
-
-EXPOSE 5000
+EXPOSE 8080
 CMD ["npm", "run", "dev"]
