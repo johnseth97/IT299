@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/johnseth97/IT299/compare/v1.1.2...v1.2.0) (2025-07-15)
+
+
+### Features
+
+* **CD:** major build changes, cors, the like. Actually building, not previewing. ([284a043](https://github.com/johnseth97/IT299/commit/284a043a4b2c970049c9625f08425051e707d44f))
+* **vite:** pull url from .env ([e829def](https://github.com/johnseth97/IT299/commit/e829defdec07998e39b481ed86abfb93e5e3fd51))
+
 ## [1.1.2](https://github.com/johnseth97/IT299/compare/v1.1.1...v1.1.2) (2025-07-15)
 
 
