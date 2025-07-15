@@ -10,6 +10,41 @@ import { toast } from 'sonner'
 import clsx from 'clsx'
 import { UploadDialog } from '@/components/ImageUploaderDialog'
 
+function showUploadToast({
+  qty,
+  serviceTypeId,
+  serviceName,
+  photoUrls,
+  removeLastInstance,
+}: {
+  qty: number
+  serviceTypeId: number
+  serviceName: string
+  photoUrls: string[]
+  removeLastInstance: (item: {
+    serviceTypeId: number
+    photoUrl: string
+  }) => void
+}) {
+  const toastId = `${serviceTypeId}-${Date.now()}`
+  toast(`🎉 ${qty} × ${serviceName} added to cart`, {
+    id: toastId,
+    duration: 5000,
+    action: {
+      label: 'Undo',
+      onClick: () => {
+        for (const photoUrl of photoUrls) {
+          removeLastInstance({ serviceTypeId, photoUrl })
+        }
+        toast.dismiss(toastId)
+        toast.error(`❌ Removed ${qty} × ${serviceName} from cart`)
+      },
+    },
+    className:
+      'bg-green-100 text-green-800 border-green-300 transition-opacity duration-1000',
+  })
+}
+
 export default function Services() {
   const [grouped, setGrouped] = useState<GroupedServiceTypes[]>([])
   const { addItem, removeLastInstance } = useCart()
@@ -41,22 +76,6 @@ export default function Services() {
     setTimeout(() => {
       setRecentlyAdded((prev) => ({ ...prev, [svc.id]: false }))
     }, 3000)
-
-    const toastId = `${svc.id}-${Date.now()}`
-    toast(`🎉 ${qty} × ${svc.name} added to cart`, {
-      id: toastId,
-      duration: Infinity,
-      action: {
-        label: 'Undo',
-        onClick: () => {
-          for (let i = 0; i < qty; i++) {
-            removeLastInstance({ serviceTypeId: svc.id, photoUrl: '' })
-          }
-          toast.dismiss(toastId)
-          toast.error(`❌ Removed ${qty} × ${svc.name} from cart`)
-        },
-      },
-    })
 
     setDialogOpenServiceId(svc.id)
   }
@@ -120,24 +139,35 @@ export default function Services() {
           expectedCount={quantities[dialogOpenServiceId] || 1}
           onClose={() => setDialogOpenServiceId(null)}
           onComplete={(images) => {
-            for (let i = 0; i < images.length; i++) {
-              removeLastInstance({
-                serviceTypeId: dialogOpenServiceId,
-                photoUrl: '',
-              })
+            const qty = images.length
+            const serviceTypeId = dialogOpenServiceId
+            const serviceName =
+              grouped
+                .flatMap((g) => g.services)
+                .find((s) => s.id === serviceTypeId)?.name || 'Selected Service'
+
+            // Clear placeholders (if used)
+            for (let i = 0; i < qty; i++) {
+              removeLastInstance({ serviceTypeId, photoUrl: '' })
             }
 
+            // Add uploaded items and collect photo URLs
+            const uploaded: string[] = []
             for (const base64 of images) {
-              addItem({ serviceTypeId: dialogOpenServiceId, photoUrl: base64 })
+              addItem({ serviceTypeId, photoUrl: base64 })
+              uploaded.push(base64)
             }
 
-            toast.success(
-              `✅ Uploaded ${images.length} photo(s) for ${
-                grouped
-                  .flatMap((g) => g.services)
-                  .find((s) => s.id === dialogOpenServiceId)?.name
-              }`
-            )
+            // Show toast
+            showUploadToast({
+              qty,
+              serviceTypeId,
+              serviceName,
+              photoUrls: uploaded,
+              removeLastInstance,
+            })
+
+            setDialogOpenServiceId(null)
           }}
         />
       )}

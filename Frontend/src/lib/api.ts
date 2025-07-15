@@ -42,6 +42,12 @@ export type OrderResponse = {
   }[]
 }
 
+// When the return type could be either a single order or multiple
+export type OrderResult = OrderResponse | OrderResponse[]
+
+// You can also be explicit for specific hooks or API handlers
+export type OrderListResponse = OrderResponse[]
+export type SingleOrderResponse = OrderResponse
 export type CustomerInput = {
   name: string
   email: string
@@ -75,6 +81,27 @@ export async function fetchOrdersByEmail(
     throw new Error(err.error || 'Failed to fetch orders')
   }
   return await res.json()
+}
+
+export async function fetchOrderById(orderId: string): Promise<OrderResponse> {
+  const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`)
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.error || 'Failed to fetch order')
+  }
+  return res.json()
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export async function fetchOrdersSmart(input: string): Promise<OrderResult> {
+  if (emailRegex.test(input)) {
+    return await fetchOrdersByEmail(input)
+  } else if (/^[a-zA-Z0-9-]+$/.test(input)) {
+    return await fetchOrderById(input)
+  } else {
+    throw new Error('Invalid input format')
+  }
 }
 
 export async function submitOrder(

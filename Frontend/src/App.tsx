@@ -21,12 +21,7 @@ function App() {
               <Route path="/orders" element={<Orders />} />
             </Routes>
           </div>
-          <Toaster
-            position="top-left"
-            richColors
-            closeButton
-            duration={10000}
-          />
+          <Toaster position="top-left" richColors closeButton duration={5000} />
         </Router>
       </CartProvider>
     </StrictMode>

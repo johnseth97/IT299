@@ -1,22 +1,34 @@
 // src/pages/Orders.tsx
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { fetchOrdersByEmail } from '@/lib/api'
+import { fetchOrdersSmart } from '@/lib/api'
 import type { OrderResponse } from '@/lib/api'
 import { toast } from 'sonner'
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
+import { useSearchParams } from 'react-router-dom'
+
+function groupServicesByCategory(services: OrderResponse['services']) {
+  return services.reduce<Record<string, typeof services>>((acc, svc) => {
+    const cat = svc.category?.name || 'Uncategorized'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(svc)
+    return acc
+  }, {})
+}
 
 export default function Orders() {
-  const [email, setEmail] = useState('')
+  const [input, setInput] = useState('')
   const [orders, setOrders] = useState<OrderResponse[]>([])
+  const [searchParams] = useSearchParams()
 
   const handleSearch = async () => {
     try {
-      const result = await fetchOrdersByEmail(email)
-      setOrders(result)
-    } catch (err: unknown) {
+      const result = await fetchOrdersSmart(input)
+      const normalized = Array.isArray(result) ? result : [result]
+      setOrders(normalized)
+    } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Failed to fetch orders'
       toast.error(message)
@@ -24,14 +36,35 @@ export default function Orders() {
     }
   }
 
+  useEffect(() => {
+    const preset = searchParams.get('order')
+    if (preset) {
+      setInput(preset)
+      fetchOrdersSmart(preset)
+        .then((result) => {
+          const normalized = Array.isArray(result) ? result : [result]
+          setOrders(normalized)
+        })
+        .catch((err) => {
+          toast.error(
+            err instanceof Error ? err.message : 'Failed to fetch orders'
+          )
+        })
+    }
+  }, [searchParams])
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
         <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          inputMode="email"
+          autoCorrect="off"
+          autoCapitalize="off"
+          autoComplete="email"
+          placeholder="Enter your email or order ID"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault()
@@ -48,16 +81,7 @@ export default function Orders() {
             (sum, svc) => sum + svc.cost,
             0
           )
-
-          // Group services by category
-          const groupedServices = order.services.reduce<
-            Record<string, typeof order.services>
-          >((acc, svc) => {
-            const cat = svc.category?.name || 'Uncategorized'
-            if (!acc[cat]) acc[cat] = []
-            acc[cat].push(svc)
-            return acc
-          }, {})
+          const groupedServices = groupServicesByCategory(order.services)
 
           return (
             <Card key={order.id}>
@@ -70,9 +94,10 @@ export default function Orders() {
                     {new Date(order.created_at + 'Z').toLocaleString()}
                   </span>
                 </div>
-                <p className="text-gray-700">Customer: {order.name}</p>
+                <p className="text-gray-700">
+                  Customer: {order.name || order.email}
+                </p>
 
-                {/* Grouped services */}
                 <div className="space-y-4 pt-2">
                   {Object.entries(groupedServices).map(
                     ([category, services]) => (
@@ -107,7 +132,10 @@ export default function Orders() {
                                     </DialogTrigger>
                                     <DialogContent
                                       className="p-0 max-w-none bg-transparent border-none shadow-none"
-                                      style={{ width: 'auto', height: 'auto' }}
+                                      style={{
+                                        width: 'auto',
+                                        height: 'auto',
+                                      }}
                                     >
                                       <div className="flex justify-center items-center max-h-[90vh] overflow-auto">
                                         <img
