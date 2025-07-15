@@ -33,13 +33,13 @@ const proxyOptions: Options = {
 
   // hook into the underlying http-proxy events
   on: {
-    proxyReq(proxyReq, req, res) {
+    proxyReq(proxyReq, req, _res) {
       console.log(
         `   ↪ [PROXY REQ] ${req.method} ${req.url} → ` +
           `${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`
       )
     },
-    proxyRes(proxyRes, req, res) {
+    proxyRes(proxyRes, req, _res) {
       console.log(
         `   ↩ [PROXY RES] ${req.method} ${req.url} ← ` +
           `${proxyRes.statusCode}`
@@ -47,8 +47,6 @@ const proxyOptions: Options = {
     },
     error(err, _req, res) {
       console.error('⚠️ [PROXY ERROR]', err)
-      if (!res) {
-      }
       res.end('Bad gateway')
     },
   },
