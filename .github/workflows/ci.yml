@@ -108,3 +108,10 @@ jobs:
           path: |
             semver_tag.txt
             ci-meta.json
+
+      - name: Set tag as output
+        id: set_tag
+        run: |
+          TAG=$(cat semver_tag.txt 2>/dev/null || echo "latest")
+          echo "tag=$TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
