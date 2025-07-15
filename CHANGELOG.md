@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/johnseth97/IT299/compare/v1.1.0...v1.1.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **CD:** moved dockerfile context ([20aa37f](https://github.com/johnseth97/IT299/commit/20aa37f928ac899c14f2192f2c09729a6084bf17))
+* **workflow:** conditionally skip downloading CI metadata ([ebaa134](https://github.com/johnseth97/IT299/commit/ebaa1342eabb1e9f399e55ee067ef194798f7e82))
+* **workflow:** fetch depth on checkout ([39bc4ea](https://github.com/johnseth97/IT299/commit/39bc4ea34a46ec97418d0fb0012c58c6833dc468))
+
 # [1.1.0](https://github.com/johnseth97/IT299/compare/v1.0.0...v1.1.0) (2025-07-15)
 
 
