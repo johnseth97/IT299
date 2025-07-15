@@ -1,13 +1,4 @@
-# [1.0.0-test.2](https://github.com/johnseth97/IT299/compare/v1.0.0-test.1...v1.0.0-test.2) (2025-07-15)
-
-
-### Features
-
-* **CD:** fixed docker containers and added workflow dispatch ([6578ae4](https://github.com/johnseth97/IT299/commit/6578ae4859ddfe69f095e99ab3ebe6742b7f5ea5))
-* **frontend:** added ability to search by id and email ([4b9a57f](https://github.com/johnseth97/IT299/commit/4b9a57fddbb773f56cbe35865637a577fcde2513))
-
-# 1.0.0-test.1 (2025-07-14)
-
+# 1.0.0 (2025-07-14)
 
 ### Features
 
