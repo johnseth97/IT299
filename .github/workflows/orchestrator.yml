@@ -7,10 +7,16 @@ on:
       - test
       - dev
       - feature/**
+    tags:
+      - 'v*.*.*' # trigger on semver tag
   pull_request:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build/publish'
+        required: false
 
 jobs:
   changes:
@@ -33,10 +39,21 @@ jobs:
 
   trigger-ci:
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' }}
+    if: ${{ github.event_name == 'pull_request' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' }}
     uses: ./.github/workflows/ci.yml
     secrets: inherit
     with:
       run_backend: ${{ needs.changes.outputs.backend == 'true' }}
       run_frontend: ${{ needs.changes.outputs.frontend == 'true' }}
       is_pr: ${{ github.event_name == 'pull_request' }}
+
+  build-publish:
+    # 🔥 Trigger on new tag or manual dispatch with tag input
+    if: ${{ startsWith(github.ref, 'refs/tags/') || github.event.inputs.tag != '' }}
+    uses: ./.github/workflows/build-publish.yml
+    secrets: inherit
+    with:
+      tag: ${{ github.event.inputs.tag || github.ref_name }}
+      is_pr: false
+      run_backend: true
+      run_frontend: true
