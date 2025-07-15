@@ -1,31 +1,33 @@
 # Dockerfile.frontend
+
 FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Copy monorepo-level files
+# Accept API URL as build-time argument
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
+# Copy workspace and frontend files
 COPY ./package*.json ./pnpm-workspace.yaml* ./
 COPY ./Frontend ./Frontend
 
 # Install only frontend deps
 RUN npm install --workspace Frontend
 
-# Build the frontend
+# Build the frontend with the injected API URL
 WORKDIR /app/Frontend
 RUN npm run build
 
-# Serve static files with Express
+# Serve with Express
 FROM node:20-slim AS runner
 
 WORKDIR /app
 
 COPY --from=builder /app/Frontend/dist ./dist
 COPY --from=builder /app/Frontend/server.ts ./server.ts
-COPY --from=builder /app/Frontend/package.json ./package.json
 
-# Install just express (can skip package.json if not needed)
-RUN npm install express 
-
+RUN npm install express
 RUN npm install -g tsx
 
 EXPOSE 3000

@@ -13,6 +13,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
+      run_ci: ${{ steps.commit_check.outputs.run_ci }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,9 +27,19 @@ jobs:
             frontend:
               - 'Frontend/**'
 
+      - name: Check for [run ci] in commit message
+        id: commit_check
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Last commit: $COMMIT_MSG"
+          if echo "$COMMIT_MSG" | grep -iq '\[run ci\]'; then
+            echo "run_ci=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_ci=false" >> $GITHUB_OUTPUT
+
   trigger-ci:
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' || needs.changes.outputs.run_ci == 'true' }}
     uses: ./.github/workflows/ci.yml
     secrets: inherit
     with:

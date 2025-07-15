@@ -10,28 +10,8 @@ const app = express()
 const distDir = path.join(__dirname, 'dist')
 app.use(express.static(distDir))
 
-app.get('/*splat', (_req, res, next) => {
-  const indexPath = path.join(distDir, 'index.html')
-  fs.readFile(indexPath, 'utf8', (err, html) => {
-    if (err) return next(err)
-
-    const configScript = `
-      <script>
-        window.__CONFIG__ = {
-          VITE_API_URL: "${process.env.VITE_API_URL || ''}"
-        };
-      </script>
-    `
-
-    // Inject config before the first script tag
-    const injected = html.replace(
-      '<script type="module"',
-      `${configScript}\n    <script type="module"`
-    )
-
-    res.setHeader('Content-Type', 'text/html')
-    res.send(injected)
-  })
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(distDir, 'index.html'))
 })
 
 const port = process.env.PORT || 3000

@@ -66,11 +66,7 @@ export type CreateOrderRequest = {
 
 // --- API Helpers ---
 
-// api.ts (or wherever your API calls live)
-const API_BASE =
-  typeof window !== 'undefined' && window.__CONFIG__?.VITE_API_URL
-    ? window.__CONFIG__.VITE_API_URL
-    : 'http://localhost:8080'
+const API_BASE = import.meta.env.VITE_API_URL
 
 console.log('API_BASE:', API_BASE)
 

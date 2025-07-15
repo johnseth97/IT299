@@ -8,6 +8,9 @@ const API_URL = process.env.VITE_API_URL || 'http://localhost:8080'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify(API_URL),
+  },
   server: {
     proxy: {
       '/api/': {
