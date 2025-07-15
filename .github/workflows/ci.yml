@@ -9,10 +9,16 @@ on:
       run_frontend:
         required: true
         type: boolean
+  pull_request:
+    branches:
+      - main
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   backend:
-    if: ${{ inputs.run_backend }}
+    if: ${{ inputs.run_backend || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -39,7 +45,7 @@ jobs:
         run: echo "✅ Backend tests passed"
 
   frontend:
-    if: ${{ inputs.run_frontend }}
+    if: ${{ inputs.run_frontend || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     defaults:
       run:

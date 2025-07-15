@@ -7,6 +7,9 @@ on:
       - test
       - dev
       - feature/**
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -36,3 +39,4 @@ jobs:
     with:
       run_backend: ${{ needs.changes.outputs.backend == 'true' }}
       run_frontend: ${{ needs.changes.outputs.frontend == 'true' }}
+      is_pr: ${{ github.event_name == 'pull_request' }}

@@ -81,3 +81,4 @@ jobs:
           gh api -X PATCH /user/packages/container/${{ github.repository_owner }}%2Fit299-backend/visibility -f visibility=public || echo "backend visibility already set"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           ci-meta.json
