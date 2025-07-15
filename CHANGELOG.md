@@ -1,3 +1,19 @@
+# [1.3.0](https://github.com/johnseth97/IT299/compare/v1.2.1...v1.3.0) (2025-07-15)
+
+
+### Bug Fixes
+
+* **CD:** hopefully, the final dockerfile fixes ([932f27b](https://github.com/johnseth97/IT299/commit/932f27b4c794a120b8acbf48d9d3ec83e32c0ff0))
+* **CD:** missing another js ([871202c](https://github.com/johnseth97/IT299/commit/871202cf50e8c350b4a6fb293f39bfd6f6a7062b))
+* **docker:** omitted file ([6ed339b](https://github.com/johnseth97/IT299/commit/6ed339b350ab80a37c286f935875922e25be3098))
+* **frontend:** serving with express to grab process envars ([793e733](https://github.com/johnseth97/IT299/commit/793e7339d1a43500f2dd4a88e20de4c3975ee771))
+* **workflows:** passing tags back instead of artifacts ([7f0e62b](https://github.com/johnseth97/IT299/commit/7f0e62b37d8a11b951a94efd4e6cea61798de58f))
+
+
+### Features
+
+* **CI:** automatically trigger build-push ([c797848](https://github.com/johnseth97/IT299/commit/c797848134eca875a22ee0a850accd7773697240))
+
 ## [1.2.1](https://github.com/johnseth97/IT299/compare/v1.2.0...v1.2.1) (2025-07-15)
 
 
