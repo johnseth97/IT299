@@ -24,7 +24,9 @@ COPY --from=builder /app/Frontend/server.ts ./server.ts
 COPY --from=builder /app/Frontend/package.json ./package.json
 
 # Install just express (can skip package.json if not needed)
-RUN npm install express tsx
+RUN npm install express 
+
+RUN npm install -g tsx
 
 EXPOSE 3000
 CMD ["tsx", "server.ts"]
