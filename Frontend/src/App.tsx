@@ -5,10 +5,14 @@ import Services from './pages/Services'
 import Orders from './pages/Orders'
 import { Nav } from './components/Nav'
 import { CartProvider } from './context/CartContext'
-import { StrictMode } from 'react'
+import { StrictMode, useEffect } from 'react'
 import { Toaster } from 'sonner'
 
 function App() {
+  useEffect(() => {
+    fetch(`/api/health`).catch(() => {})
+  }, [])
+
   return (
     <StrictMode>
       <CartProvider>
