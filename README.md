@@ -18,7 +18,7 @@
 
 ---
 
-## 🎯 Purpose
+# Purpose
 
 This app allows customers to:
 
@@ -31,7 +31,7 @@ Designed to streamline operations for Picture This Photography, improve customer
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Layer        | Technology                           |
 |-------------|----------------------------------------|
@@ -48,7 +48,7 @@ Designed to streamline operations for Picture This Photography, improve customer
 
 ## Live Demo
 
-🟢 **URL:**  
+**URL:**  
 `https://it299-frontend-app.graydune-3d57e178.eastus.azurecontainerapps.io`
 
 **Access:**  
