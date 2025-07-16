@@ -41,6 +41,10 @@ jobs:
       - name: Placeholder Test
         run: echo "✅ Backend tests passed"
 
+      - name: Forward output
+        id: backend_output
+        run: echo "backend=true" >> $GITHUB_OUTPUT
+
   frontend:
     if: ${{ inputs.run_frontend }}
     runs-on: ubuntu-latest
@@ -67,6 +71,10 @@ jobs:
 
       - name: Placeholder Test
         run: echo "✅ Frontend tests passed"
+
+      - name: Forward output
+        id: frontend_output
+        run: echo "frontend=true" >> $GITHUB_OUTPUT
 
   release:
     if: ${{ !inputs.is_pr && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test') }}
