@@ -1,121 +1,123 @@
-# Project Overview
+# 📸 Photo Order Web App – IT299 Capstone
 
-## This project is a ful- tack web application designed to allow users to order photographs online through a shopping cart interface. It is built using modern web technologies and structured for containerized deployment.
+## A full-stack web application for ordering photography services online.
 
-## Tech Stack
+### Developed as the final product for the IT299 Integrative Project at Purdue Global
 
-- Frontend: React + Vite (TypeScript)
-- Backend: Node.js (TypeScript, Express)
-- Database: SQLite (no-persistent, for academic purposes)
-- Containerization: Docker + Docker Compose
-- CI/CD & Deployment: GitHub Actions → Azure Container Apps (simulated)
+---
 
-⸻
+## Table of Contents
+- [Purpose](#-purpose)
+- [Tech Stack](#-tech-stack)
+- [Live Demo](#live-demo)
+- [Features](#features)
+- [Getting Started (For Developers)](#getting-started-for-developers)
+- [Project Structure from Root](#project-structure-from-root)
+- [Author](#author)
+- [License](#license)
 
-## System Architecture
+---
 
-The application follows a decoupled architecture:
+## 🎯 Purpose
 
-- Frontend handles user interaction, cart management, and communicates with the backend via REST APIs.
-- Backend provides REST endpoints for image browsing, cart management, order submission, and payment confirmation.
-- Database stores order data, image metadata, and temporary cart sessions.
+This app allows customers to:
 
-### All components run in isolated containers defined by a docke- ompose.yml file.
+- Select photography services (e.g., prints, edits, film scans)
+- Add them to a cart
+- Upload corresponding photos
+- Submit and retrieve orders by email or order ID — no login required
 
-⸻
+Designed to streamline operations for Picture This Photography, improve customer satisfaction, and increase stakeholder value.
 
-## Component Design
+---
+
+## ⚙️ Tech Stack
+
+| Layer        | Technology                           |
+|-------------|----------------------------------------|
+| Frontend     | React + TypeScript + Vite + Express   |
+| Backend      | Node.js + Express + TypeScript        |
+| Database     | SQLite (non-persistent for demo use)  |
+| Styling / UI | shadcn/ui components                  |
+| Uploads      | Local base64 image storage            |
+| DevOps       | Docker + Docker Compose               |
+| CI/CD        | GitHub Actions                        |
+| Hosting      | Azure Container Apps (Simulated AAS)  |
+
+---
+
+## Live Demo
+
+🟢 **URL:**  
+`https://it299-frontend-app.graydune-3d57e178.eastus.azurecontainerapps.io`
+
+**Access:**  
+
+- Github login required, as simple DDOS precaution.
+- To test order flow:
+- - add a service to the cart →
+- - upload photos → submit →
+- - check orders by email
+
+---
+
+## Features
+
+- **Cart-based Ordering** with image upload dialogs and undo options
+- **Email-based Order Lookup** (no account needed)
+- **Real-time Upload Preview** using base64 thumbnails
+- **Service Browser** from live API data (`/api/service-types`)
+- **CI/CD Pipeline** with semantic versioning and Docker image release
+- **Azure deployment** with simulated enterprise conditions
+
+---
+
+## Getting Started (For Developers)
+
+### Local Production Setup
+
+```bash
+git clone https://github.com/johnseth97/IT299
+cd IT299
+
+# Local Production Compose (Docker)
+docker-compose -f docker-compose.yml up --build
+
+# Local Production native
+cd Backend && npm install && npm run dev
+cd Frontend && npm install && npm run dev
+
+# Local Development using Vite (From Root)
+npm i && npm run dev
 
 ```
-[ React Frontend ]
-    ↕  REST API (JSON over HTTPS)
-[ Node/Express Backend ]
-    ↕
-[ SQLite Database ]
+
+All local builds use .env files in /Frontend and /Backend for local configuration.
+
+---
+
+## Project Structure from Root
+
+```sh
+/Frontend     # React + Vite app (client UI)
+/Backend      # Express + SQLite backend (REST API)
+/.github      # GitHub Actions workflows
+Dockerfile.*  # Container builds
+docker-compose.yml # Docker Compose for local production
 ```
 
-- Frontend and backend are containerized separately.
-- API calls flow through port- xposed backend container.
+---
 
-⸻
+## Author
 
-## API Contracts
-
-Example endpoints:
-
-```
-Method | Endpoint      | Description
-GET    | /api/photos   | Retrieve available photos
-POST   | /api/cart     | Add item to cart
-GET    | /api/cart     | Retrieve current cart contents
-POST   | /api/order    | Finalize and place an order
-POST   | /api/payments | Simulate payment confirmation
+```markdown
+Ethan Johnson
+IT299 – Purdue Global, Summer 2025
+All code original unless otherwise noted.
 ```
 
-### All requests return JSON responses and follow REST conventions
+---
 
-⸻
+## License
 
-## Frontend UX
-
-The frontend will consist of:
-
-- Gallery View: Browse available photos
-- Cart View: View and modify selected items
-- Checkout View: Confirm and submit orders
-- Confirmation View: Show final success screen
-
-### Navigation is handled with React Router
-
-⸻
-
-## Backend Endpoint Design
-
-The backend is designed using Express with the following:
-
-- Route structure: api/- refixed REST endpoints
-- Middleware: JSON body parsing, simple auth token parsing, logging
-- Services: In- emory and SQLite-backed logic for cart/order/payment flows
-
-⸻
-
-## Authentication
-
-For the purposes of this project:
-
-- No external login is implemented
-- Auth system is simulated with pre- et session tokens or placeholder fields
-- A future extension could use Azure Easy Auth or OAuth providers like GitHub/Google
-
-⸻
-
-## Database Schema
-
-The SQLite schema includes:
-
-- photos(id, title, url)
-- cart(id, photo_id, quantity)
-- orders(id, user_id, total, created_at)
-- order_items(id, order_id, photo_id, quantity)
-
-This schema supports basic cart and order tracking logic.
-
-⸻
-
-## Docker Setup
-
-- The frontend and backend each has its own Dockerfile
-- A docker-compose.yml file defines shared network, volume mounts, build strategy
-- A docker-compose.override.yml file defines the overrides for the dev environment
-- Backend exposes port 5000; frontend port 3000
-- .env files used for environment config
-
-⸻
-
-## Deployment (Simulated)
-
-- GitHub Actions pipeline builds containers and push (in real deployment)
-- Simulated deployment to Azure Container Apps using mock step in CI
-- CI pipeline includes lint/test/build steps for both frontend and backend
-
-⸻
+***Academic use only. For IT299 evaluation and demonstration purposes.***
