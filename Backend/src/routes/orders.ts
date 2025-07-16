@@ -1,12 +1,8 @@
 import { Router, Request, Response } from 'express'
 import db from '../db.js'
 import { randomUUID } from 'crypto'
-import {
-  CustomerInput,
-  ServiceInput,
-  OrderRow,
-  ServiceRow,
-} from '../types/dbTypes'
+import { CustomerInput, ServiceInput, OrderRow } from '../types/dbTypes'
+import { formatServices, RawServiceRow } from '../utils/formatServices.js'
 
 const router = Router()
 
@@ -77,21 +73,28 @@ router.get('/:id', (req: Request, res: Response) => {
 
   if (!order) return res.status(404).json({ error: 'Order not found' })
 
-  const services = db
+  const rawServices = db
     .prepare(
       `
-      SELECT s.id, s.photo_url, st.name AS service_type, st.cost
+      SELECT 
+        s.id,
+        s.photo_url,
+        st.name AS service_type,
+        st.cost,
+        c.id AS category_id,
+        c.name AS category_name,
+        c.description AS category_description
       FROM services s
       JOIN service_types st ON s.service_type_id = st.id
+      LEFT JOIN categories c ON st.category_id = c.id
       WHERE s.order_id = ?
     `
     )
-    .all(orderId) as ServiceRow[]
+    .all(orderId) as RawServiceRow[]
 
+  const services = formatServices(rawServices)
   res.json({ ...order, services })
 })
-
-// backend/src/routes/orders.ts
 
 router.get('/email/:email', (req: Request, res: Response) => {
   const email = req.params.email
@@ -113,18 +116,24 @@ router.get('/email/:email', (req: Request, res: Response) => {
   }
 
   const getServices = db.prepare(`
-    SELECT s.id, s.photo_url, st.name AS service_type, st.cost, s.order_id
+    SELECT 
+      s.id,
+      s.photo_url,
+      st.name AS service_type,
+      st.cost,
+      c.id AS category_id,
+      c.name AS category_name,
+      c.description AS category_description
     FROM services s
     JOIN service_types st ON s.service_type_id = st.id
+    LEFT JOIN categories c ON st.category_id = c.id
     WHERE s.order_id = ?
   `)
 
   const result = orders.map((order) => {
-    const services = getServices.all(order.id) as ServiceRow[]
-    return {
-      ...order,
-      services,
-    }
+    const rawServices = getServices.all(order.id) as RawServiceRow[]
+    const services = formatServices(rawServices)
+    return { ...order, services }
   })
 
   res.json(result)

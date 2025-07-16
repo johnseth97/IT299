@@ -33,13 +33,13 @@ const proxyOptions: Options = {
 
   // hook into the underlying http-proxy events
   on: {
-    proxyReq(proxyReq, req, _res) {
+    proxyReq(proxyReq, req) {
       console.log(
         `   ↪ [PROXY REQ] ${req.method} ${req.url} → ` +
           `${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`
       )
     },
-    proxyRes(proxyRes, req, _res) {
+    proxyRes(proxyRes, req) {
       console.log(
         `   ↩ [PROXY RES] ${req.method} ${req.url} ← ` +
           `${proxyRes.statusCode}`
