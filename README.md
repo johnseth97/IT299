@@ -54,6 +54,10 @@ Designed to streamline operations for Picture This Photography, improve customer
 **Access:**  
 
 - Github login required, as simple DDOS precaution.
+- Container App set to auto-scale down to 0 instances when idle.
+- - If the app is slow to load, it may be scaling up from 0.
+- - Please wait 30-60 seconds and refresh.
+- - Same for first call to the backend API.
 - To test order flow:
 - - add a service to the cart →
 - - upload photos → submit →
