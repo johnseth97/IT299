@@ -11,10 +11,10 @@ on:
         type: boolean
       run_backend:
         required: true
-        type: boolean
+        type: string
       run_frontend:
         required: true
-        type: boolean
+        type: string
   workflow_dispatch:
     inputs:
       tag:
